@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Great Empire Team - About</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ffb703;
+            --primary-hover: #fb8500;
+            --dark-bg: #023047;
+            --light-bg: #f8f9fa;
+            --text-main: #212529;
+            --text-light: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: var(--text-main);
+            background-color: var(--light-bg);
+            overflow-x: hidden;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(2, 48, 71, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-decoration: none;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            color: var(--primary-color);
+        }
+
+        nav a {
+            color: white;
+            margin-left: 2rem;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 400;
+            transition: color 0.3s;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: var(--primary-color);
+        }
+
+        .page-header {
+            background: linear-gradient(rgba(2, 48, 71, 0.9), rgba(2, 48, 71, 0.9)), url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
+            padding: 10rem 2rem 6rem;
+            text-align: center;
+            color: white;
+        }
+
+        .page-header h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .content-section {
+            background: white;
+            max-width: 900px;
+            margin: -3rem auto 4rem;
+            border-radius: 20px;
+            padding: 4rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            position: relative;
+            z-index: 10;
+        }
+
+        .content-section p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .content-section p:last-child {
+            margin-bottom: 0;
+        }
+
+        footer {
+            background: #011E2D;
+            color: white;
+            padding: 3rem 2rem 1.5rem;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo span {
+            color: var(--primary-color);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.5rem;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav a {
+                margin: 0 0.8rem;
+            }
+
+            .content-section {
+                padding: 2rem;
+                margin: -2rem 1rem 3rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">Great <span>Empire</span></a>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="about.html" class="active">About</a>
+                <a href="services.html">Services</a>
+                <a href="contact.html">Contact</a>
+                <a href="hire-us.html">Hire Us</a>
+                <a href="code-gallery.html">Code Gallery</a>
+                <a href="user-dashboard.html">Chat Admin</a>
+                <a href="settings.html">Settings</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="page-header">
+        <h1>About Us</h1>
+        <p>Discover who we are and what drives our passion for technology.</p>
+    </div>
+
+    <main class="content-section">
+        <p>Great Empire is a dynamic and innovative team of full-stack programmers, software engineers, mobile app
+            developers, and data scientists dedicated to building high-quality digital solutions.</p>
+        <p>We specialize in a wide range of technologies, including Python, C++, and Java, enabling us to design,
+            develop, and deploy scalable and efficient applications across various platforms. Our expertise spans web
+            development, mobile applications, and data-driven solutions tailored to meet modern technological demands.
+        </p>
+        <p>At Great Empire, we combine technical excellence with strong team leadership to deliver exceptional results.
+            We are committed to innovation, reliability, and continuous improvement, ensuring that every project meets
+            the highest standards of quality and performance.</p>
+        <p><strong>Get in touch with us: to see our code and run it go to the code gallery</strong></p>
+        <p>Explore our collection of ready-to-run code samples and see the results instantly!</p>
+    </main>
+
+    <footer>
+        <div class="footer-logo">Great <span>Empire</span></div>
+        <p style="color: rgba(255,255,255,0.7); max-width: 400px; margin: 0 auto;">Empowering businesses through
+            cutting-edge technology and innovative software solutions.</p>
+        <div class="footer-bottom">
+            &copy; 2026 Great Empire Team. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- Code Protection Script -->
+    <script src="code-protection.js"></script>
+</body>
+
+</html>

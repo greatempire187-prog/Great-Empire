@@ -1,0 +1,1649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Great Empire - Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ffb703;
+            --primary-hover: #fb8500;
+            --dark-bg: #023047;
+            --light-bg: #f8f9fa;
+            --text-main: #212529;
+            --text-light: #6c757d;
+            --success-color: #51cf66;
+            --danger-color: #ff6b6b;
+            --warning-color: #ffd43b;
+            --info-color: #339af0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #011e2d 100%);
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            background: var(--dark-bg);
+            color: white;
+            text-align: center;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-header p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .nav-menu {
+            flex: 1;
+            padding: 1.5rem 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            color: var(--text-main);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: var(--light-bg);
+            color: var(--primary-color);
+        }
+
+        .nav-item.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .nav-item i {
+            width: 20px;
+            margin-right: 1rem;
+        }
+
+        .logout-btn {
+            margin: 1rem 1.5rem;
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #ff5252;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .content-header {
+            margin-bottom: 2rem;
+        }
+
+        .content-header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .content-header p {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .stat-icon.users { background: var(--info-color); color: white; }
+        .stat-icon.codes { background: var(--success-color); color: white; }
+        .stat-icon.messages { background: var(--warning-color); color: white; }
+        .stat-icon.views { background: var(--primary-color); color: white; }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--dark-bg);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            display: none;
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light-bg);
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-bg);
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .data-table th {
+            background: var(--light-bg);
+            font-weight: 600;
+            color: var(--dark-bg);
+        }
+
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark-bg);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-bg);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        .close-btn:hover {
+            color: var(--dark-bg);
+        }
+
+        .chart-container {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: var(--light-bg);
+            border-radius: 8px;
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark-bg);
+            margin-bottom: 1rem;
+        }
+
+        .chart-placeholder {
+            height: 300px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+        }
+
+        .email-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tab-btn {
+            padding: 0.6rem 1rem;
+            border: none;
+            border-radius: 8px;
+            background: var(--light-bg);
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .tab-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .tab-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #40a060;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .admin-layout {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Great Empire</h2>
+                <p>Admin Dashboard</p>
+            </div>
+            
+            <nav class="nav-menu">
+                <button class="nav-item active" onclick="showSection('dashboard', this)">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Dashboard
+                </button>
+                <button class="nav-item" onclick="showSection('users', this)">
+                    <i class="fas fa-users"></i>
+                    User Management
+                </button>
+                <button class="nav-item" onclick="showSection('codes', this)">
+                    <i class="fas fa-code"></i>
+                    Code Gallery
+                </button>
+                <button class="nav-item" onclick="showSection('chat', this)">
+                    <i class="fas fa-comments"></i>
+                    Chat Management
+                </button>
+                <button class="nav-item" onclick="showSection('hire', this)">
+                    <i class="fas fa-handshake"></i>
+                    Hire Us Messages
+                </button>
+                <button class="nav-item" onclick="showSection('email', this)">
+                    <i class="fas fa-envelope"></i>
+                    Email Messaging
+                </button>
+                <button class="nav-item" onclick="showSection('analytics', this)">
+                    <i class="fas fa-chart-line"></i>
+                    Analytics
+                </button>
+                <button class="nav-item" onclick="showSection('settings', this)">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </button>
+            </nav>
+            
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="content-header">
+                <h1>Admin Dashboard</h1>
+                <p>Welcome back, <span id="adminName">Admin</span></p>
+            </div>
+
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="content-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon users">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-value" id="totalUsers">0</div>
+                        <div class="stat-label">Total Users</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon codes">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="stat-value" id="totalCodes">0</div>
+                        <div class="stat-label">Code Snippets</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon messages">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="stat-value" id="totalMessages">0</div>
+                        <div class="stat-label">Chat Messages</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon views">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="stat-value" id="totalViews">0</div>
+                        <div class="stat-label">Page Views</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">Recent Activity</div>
+                    <div class="chart-placeholder">
+                        <i class="fas fa-chart-line" style="font-size: 3rem; margin-right: 1rem;"></i>
+                        Activity chart will be displayed here
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Management Section -->
+            <div id="users" class="content-section">
+                <div class="section-header">
+                    <h2>User Management</h2>
+                    <button class="btn btn-primary" onclick="openUserModal()">
+                        <i class="fas fa-plus"></i> Add User
+                    </button>
+                </div>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Joined</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTable">
+                        <!-- Users will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Code Gallery Section -->
+            <div id="codes" class="content-section">
+                <div class="section-header">
+                    <h2>Code Gallery Management</h2>
+                    <button class="btn btn-primary" onclick="openCodeModal()">
+                        <i class="fas fa-plus"></i> Add Code
+                    </button>
+                </div>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Language</th>
+                            <th>Author</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="codesTable">
+                        <!-- Codes will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Chat Management Section -->
+            <div id="chat" class="content-section">
+                <div class="section-header">
+                    <h2>Chat Management</h2>
+                    <button class="btn btn-danger" onclick="clearAllMessages()">
+                        <i class="fas fa-trash"></i> Clear All Messages
+                    </button>
+                </div>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Sender</th>
+                            <th>Message</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="chatTable">
+                        <!-- Chat messages will be populated here -->
+                    </tbody>
+                </table>
+
+                <!-- Reply Modal -->
+                <div id="replyModal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Reply to Message</h3>
+                            <button class="close-btn" onclick="closeModal('replyModal')">&times;</button>
+                        </div>
+                        <form id="replyForm">
+                            <div class="form-group">
+                                <label for="replyTo">Replying to</label>
+                                <input type="text" id="replyTo" class="form-control" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="originalMessage">Original Message</label>
+                                <textarea id="originalMessage" class="form-control" rows="3" readonly></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="replyMessage">Your Reply</label>
+                                <textarea id="replyMessage" class="form-control" rows="4" placeholder="Type your reply here..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane"></i> Send Reply
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hire Us Messages Section -->
+            <div id="hire" class="content-section">
+                <div class="section-header">
+                    <h2>Hire Us Messages</h2>
+                    <button class="btn btn-danger" onclick="clearAllHireRequests()">
+                        <i class="fas fa-trash"></i> Clear All Requests
+                    </button>
+                </div>
+                
+                <div id="hireRequestsList">
+                    <!-- Hire requests will be populated here -->
+                </div>
+            </div>
+
+            <!-- Email Messaging Section -->
+            <div id="email" class="content-section">
+                <div class="section-header">
+                    <h2>Email Messaging</h2>
+                    <button class="btn btn-primary" onclick="openEmailModal()">
+                        <i class="fas fa-plus"></i> Compose Email
+                    </button>
+                </div>
+                
+                <!-- Email Tabs -->
+                <div class="email-tabs">
+                    <button class="tab-btn active" onclick="switchEmailTab('inbox', this)">
+                        <i class="fas fa-inbox"></i> Inbox
+                    </button>
+                    <button class="tab-btn" onclick="switchEmailTab('sent', this)">
+                        <i class="fas fa-paper-plane"></i> Sent
+                    </button>
+                </div>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>From</th>
+                            <th>Subject</th>
+                            <th>Message</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="emailTable">
+                        <!-- Email messages will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Analytics Section -->
+            <div id="analytics" class="content-section">
+                <div class="section-header">
+                    <h2>Analytics & Statistics</h2>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-title">User Activity Over Time</div>
+                    <div class="chart-placeholder">
+                        <i class="fas fa-chart-area" style="font-size: 3rem; margin-right: 1rem;"></i>
+                        User activity chart will be displayed here
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-title">Code Language Distribution</div>
+                    <div class="chart-placeholder">
+                        <i class="fas fa-chart-pie" style="font-size: 3rem; margin-right: 1rem;"></i>
+                        Language distribution chart will be displayed here
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settings" class="content-section">
+                <div class="section-header">
+                    <h2>Settings</h2>
+                </div>
+                
+                <form id="settingsForm">
+                    <div class="form-group">
+                        <label for="siteName">Site Name</label>
+                        <input type="text" id="siteName" class="form-control" value="Great Empire">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="adminEmail">Admin Email</label>
+                        <input type="email" id="adminEmail" class="form-control" value="admin@greatempire.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="maxUsers">Maximum Users</label>
+                        <input type="number" id="maxUsers" class="form-control" value="1000">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="maintenanceMode">
+                            <input type="checkbox" id="maintenanceMode"> Maintenance Mode
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Settings
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Modal -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add/Edit User</h3>
+                <button class="close-btn" onclick="closeModal('userModal')">&times;</button>
+            </div>
+            <form id="userForm">
+                <div class="form-group">
+                    <label for="userUsername">Username</label>
+                    <input type="text" id="userUsername" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="userEmail">Email</label>
+                    <input type="email" id="userEmail" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="userPassword">Password</label>
+                    <input type="password" id="userPassword" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="userStatus">Status</label>
+                    <select id="userStatus" class="form-control">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save User
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Code Modal -->
+    <div id="codeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add/Edit Code</h3>
+                <button class="close-btn" onclick="closeModal('codeModal')">&times;</button>
+            </div>
+            <form id="codeForm">
+                <div class="form-group">
+                    <label for="codeTitle">Title</label>
+                    <input type="text" id="codeTitle" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="codeLanguage">Language</label>
+                    <select id="codeLanguage" class="form-control" required>
+                        <option value="Python">Python</option>
+                        <option value="JavaScript">JavaScript</option>
+                        <option value="C++">C++</option>
+                        <option value="Java">Java</option>
+                        <option value="HTML">HTML</option>
+                        <option value="CSS">CSS</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="codeDescription">Description</label>
+                    <textarea id="codeDescription" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="codeContent">Code</label>
+                    <textarea id="codeContent" class="form-control" rows="10" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Code
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Compose Email</h3>
+                <button class="close-btn" onclick="closeModal('emailModal')">&times;</button>
+            </div>
+            <form id="emailForm">
+                <div class="form-group">
+                    <label for="emailTo">To</label>
+                    <input type="email" id="emailTo" class="form-control" placeholder="Enter recipient email" required>
+                </div>
+                <div class="form-group">
+                    <label for="emailSubject">Subject</label>
+                    <input type="text" id="emailSubject" class="form-control" placeholder="Enter email subject" required>
+                </div>
+                <div class="form-group">
+                    <label for="emailMessage">Message</label>
+                    <textarea id="emailMessage" class="form-control" rows="6" placeholder="Type your message here..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="emailFrom">
+                        <input type="checkbox" id="emailFrom" checked> Send from greatempire187@gmail.com
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> Send Email
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Inbox Reply Modal -->
+    <div id="inboxReplyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Reply to Inbox Message</h3>
+                <button class="close-btn" onclick="closeModal('inboxReplyModal')">&times;</button>
+            </div>
+            <form id="inboxReplyForm">
+                <div class="form-group">
+                    <label for="replyTo">Replying to</label>
+                    <input type="text" id="replyTo" class="form-control" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="originalInboxMessage">Original Message</label>
+                    <textarea id="originalInboxMessage" class="form-control" rows="3" readonly></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="inboxReplyMessage">Your Reply</label>
+                    <textarea id="inboxReplyMessage" class="form-control" rows="4" placeholder="Type your reply here..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> Send Reply
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Check authentication
+        if (sessionStorage.getItem('adminLoggedIn') !== 'true') {
+            window.location.href = 'admin-login.html';
+        }
+
+        // Set admin name
+        document.getElementById('adminName').textContent = sessionStorage.getItem('adminUser') || 'Admin';
+
+        // Navigation
+        function showSection(sectionId, element) {
+            try {
+                console.log('Switching to section:', sectionId);
+                
+                // Hide all sections
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Remove active class from all nav items
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Show selected section
+                const targetSection = document.getElementById(sectionId);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                } else {
+                    console.error('Section not found:', sectionId);
+                }
+                
+                // Add active class to clicked nav item
+                if (element) {
+                    element.classList.add('active');
+                }
+                
+                // Load section data
+                loadSectionData(sectionId);
+            } catch (error) {
+                console.error('Error in showSection:', error);
+                alert('Error switching sections. Please refresh the page.');
+            }
+        }
+
+        // Add comprehensive debugging
+        window.addEventListener('load', function() {
+            console.log('Admin dashboard loaded successfully');
+            console.log('Available sections:', ['dashboard', 'users', 'codes', 'chat', 'hire', 'email', 'analytics', 'settings']);
+            console.log('Authentication status:', sessionStorage.getItem('adminLoggedIn'));
+            
+            // Test all navigation buttons
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach((item, index) => {
+                console.log(`Nav item ${index}:`, item);
+                item.addEventListener('click', function(e) {
+                    console.log(`Clicked nav item ${index}:`, e.target);
+                });
+            });
+            
+            // Test all sections exist
+            const sections = ['dashboard', 'users', 'codes', 'chat', 'hire', 'email', 'analytics', 'settings'];
+            sections.forEach(sectionId => {
+                const section = document.getElementById(sectionId);
+                console.log(`Section ${sectionId} exists:`, !!section);
+            });
+        });
+
+        // Load section data
+        function loadSectionData(sectionId) {
+            switch(sectionId) {
+                case 'dashboard':
+                    loadDashboardStats();
+                    break;
+                case 'users':
+                    loadUsers();
+                    break;
+                case 'codes':
+                    loadCodes();
+                    break;
+                case 'chat':
+                    loadChatMessages();
+                    break;
+                case 'hire':
+                    loadHireRequests();
+                    break;
+                case 'email':
+                    loadEmails();
+                    break;
+                case 'analytics':
+                    loadAnalytics();
+                    break;
+                case 'settings':
+                    loadSettings();
+                    break;
+            }
+        }
+
+        // Dashboard Statistics
+        function loadDashboardStats() {
+            // Get data from localStorage
+            const users = JSON.parse(localStorage.getItem('adminUsers') || '[]');
+            const codes = JSON.parse(localStorage.getItem('greatEmpireCodes') || '[]');
+            const messages = JSON.parse(localStorage.getItem('greatEmpireChat') || '[]');
+            const views = parseInt(localStorage.getItem('pageViews') || '0');
+            
+            document.getElementById('totalUsers').textContent = users.length;
+            document.getElementById('totalCodes').textContent = codes.length;
+            document.getElementById('totalMessages').textContent = messages.length;
+            document.getElementById('totalViews').textContent = views;
+        }
+
+        // User Management
+        function loadUsers() {
+            const users = JSON.parse(localStorage.getItem('adminUsers') || '[]');
+            const tbody = document.getElementById('usersTable');
+            tbody.innerHTML = '';
+            
+            users.forEach((user, index) => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${user.username}</td>
+                    <td>${user.email}</td>
+                    <td><span class="status-badge status-${user.status}">${user.status}</span></td>
+                    <td>${new Date(user.joined).toLocaleDateString()}</td>
+                    <td>
+                        <button class="btn btn-primary" onclick="editUser(${index})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-danger" onclick="deleteUser(${index})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+            });
+        }
+
+        // Code Gallery Management
+        function loadCodes() {
+            const codes = JSON.parse(localStorage.getItem('greatEmpireCodes') || '[]');
+            const tbody = document.getElementById('codesTable');
+            tbody.innerHTML = '';
+            
+            codes.forEach((code, index) => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${code.title}</td>
+                    <td>${code.lang}</td>
+                    <td>${code.author || 'Admin'}</td>
+                    <td>${new Date(code.time).toLocaleDateString()}</td>
+                    <td><span class="status-badge status-active">Published</span></td>
+                    <td>
+                        <button class="btn btn-primary" onclick="editCode(${index})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-success" onclick="executeCode(${index})">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <button class="btn btn-danger" onclick="deleteCode(${index})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <div class="code-output" id="output-${index}" style="display: none; margin-top: 0.5rem;">
+                            <div style="font-weight: 600; color: var(--primary-color); margin-bottom: 0.5rem;">
+                                <i class="fas fa-terminal"></i> Output:
+                            </div>
+                            <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 6px; font-size: 0.9rem; overflow-x: auto; white-space: pre-wrap; margin: 0;">No output yet</pre>
+                        </div>
+                    </td>
+                `;
+            });
+        }
+
+        // Chat Management
+        function loadChatMessages() {
+            const messages = JSON.parse(localStorage.getItem('greatEmpireChat') || '[]');
+            const tbody = document.getElementById('chatTable');
+            tbody.innerHTML = '';
+            
+            messages.forEach((message, index) => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${message.time}</td>
+                    <td>${message.sender}</td>
+                    <td>${message.text}</td>
+                    <td><span class="status-badge status-${message.sender === 'admin' ? 'active' : 'pending'}">${message.sender}</span></td>
+                    <td>
+                        <button class="btn btn-primary" onclick="openReplyModal(${index})">
+                            <i class="fas fa-reply"></i>
+                        </button>
+                        <button class="btn btn-danger" onclick="deleteMessage(${index})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+            });
+        }
+
+        // Analytics
+        function loadAnalytics() {
+            // This would typically fetch data from a backend
+            console.log('Loading analytics data...');
+        }
+
+        // Settings
+        function loadSettings() {
+            const settings = JSON.parse(localStorage.getItem('adminSettings') || '{}');
+            document.getElementById('siteName').value = settings.siteName || 'Great Empire';
+            document.getElementById('adminEmail').value = settings.adminEmail || 'admin@greatempire.com';
+            document.getElementById('maxUsers').value = settings.maxUsers || 1000;
+            document.getElementById('maintenanceMode').checked = settings.maintenanceMode || false;
+        }
+
+        // Modal functions
+        function openUserModal() {
+            document.getElementById('userModal').classList.add('show');
+        }
+
+        function openCodeModal() {
+            document.getElementById('codeModal').classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        // Form submissions
+        document.getElementById('userForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const users = JSON.parse(localStorage.getItem('adminUsers') || '[]');
+            const newUser = {
+                username: document.getElementById('userUsername').value,
+                email: document.getElementById('userEmail').value,
+                password: document.getElementById('userPassword').value,
+                status: document.getElementById('userStatus').value,
+                joined: new Date().toISOString()
+            };
+            users.push(newUser);
+            localStorage.setItem('adminUsers', JSON.stringify(users));
+            closeModal('userModal');
+            loadUsers();
+            this.reset();
+        });
+
+        document.getElementById('codeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const codes = JSON.parse(localStorage.getItem('greatEmpireCodes') || '[]');
+            const newCode = {
+                title: document.getElementById('codeTitle').value,
+                lang: document.getElementById('codeLanguage').value,
+                desc: document.getElementById('codeDescription').value,
+                code: document.getElementById('codeContent').value,
+                author: 'Admin',
+                time: new Date().toISOString()
+            };
+            codes.push(newCode);
+            localStorage.setItem('greatEmpireCodes', JSON.stringify(codes));
+            closeModal('codeModal');
+            loadCodes();
+            this.reset();
+        });
+
+        document.getElementById('settingsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const settings = {
+                siteName: document.getElementById('siteName').value,
+                adminEmail: document.getElementById('adminEmail').value,
+                maxUsers: document.getElementById('maxUsers').value,
+                maintenanceMode: document.getElementById('maintenanceMode').checked
+            };
+            localStorage.setItem('adminSettings', JSON.stringify(settings));
+            alert('Settings saved successfully!');
+        });
+
+        // Delete functions
+        function deleteUser(index) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                const users = JSON.parse(localStorage.getItem('adminUsers') || '[]');
+                users.splice(index, 1);
+                localStorage.setItem('adminUsers', JSON.stringify(users));
+                loadUsers();
+            }
+        }
+
+        function deleteCode(index) {
+            if (confirm('Are you sure you want to delete this code?')) {
+                const codes = JSON.parse(localStorage.getItem('greatEmpireCodes') || '[]');
+                codes.splice(index, 1);
+                localStorage.setItem('greatEmpireCodes', JSON.stringify(codes));
+                loadCodes();
+            }
+        }
+
+        function executeCode(index) {
+            const codes = JSON.parse(localStorage.getItem('greatEmpireCodes') || '[]');
+            const code = codes[index];
+            
+            if (!code || !code.code) {
+                alert('No code to execute!');
+                return;
+            }
+            
+            // Simulate code execution
+            const outputDiv = document.getElementById(`output-${index}`);
+            outputDiv.style.display = 'block';
+            
+            try {
+                // Create a simple execution context
+                const context = {
+                    console: {
+                        log: [],
+                        error: [],
+                        warn: [],
+                        info: []
+                    },
+                    document: {
+                        createElement: () => document.createElement('div'),
+                        write: () => console.log
+                    }
+                };
+                
+                // Execute the code (simplified simulation)
+                const result = eval(code.code);
+                const output = typeof result === 'string' ? result : JSON.stringify(result);
+                
+                // Display output
+                    outputDiv.style.display = 'block';
+                
+                // Create output HTML with proper escaping
+                const safeOutput = output.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                const outputHtml = '<div style="font-weight: 600; color: var(--primary-color); margin-bottom: 0.5rem;">' +
+                    '<i class="fas fa-terminal"></i> Output:' +
+                    '</div>' +
+                    '<pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 6px; font-size: 0.9rem; overflow-x: auto; white-space: pre-wrap; margin: 0;">' + safeOutput + '</pre>';
+                
+                outputDiv.innerHTML = outputHtml;
+                
+                // Store execution result
+                const executions = JSON.parse(localStorage.getItem('greatEmpireCodeExecutions') || '[]');
+                executions.push({
+                    code: code.code,
+                    output: output,
+                    timestamp: new Date().toISOString(),
+                    executedBy: sessionStorage.getItem('adminUser') || 'Admin'
+                });
+                localStorage.setItem('greatEmpireCodeExecutions', JSON.stringify(executions));
+                
+            } catch (error) {
+                outputDiv.innerHTML = `
+                    <div style="font-weight: 600; color: var(--danger-color); margin-bottom: 0.5rem;">
+                        <i class="fas fa-exclamation-triangle"></i> Error:
+                    </div>
+                    <pre style="background: #f8d7da; color: #721c24; padding: 1rem; border-radius: 6px; font-size: 0.9rem; overflow-x: auto; white-space: pre-wrap; margin: 0;">${error.message}</pre>
+                `;
+            }
+        }
+
+        function deleteMessage(index) {
+            if (confirm('Are you sure you want to delete this message?')) {
+                const messages = JSON.parse(localStorage.getItem('greatEmpireChat') || '[]');
+                messages.splice(index, 1);
+                localStorage.setItem('greatEmpireChat', JSON.stringify(messages));
+                loadChatMessages();
+            }
+        }
+
+        function clearAllMessages() {
+            if (confirm('Are you sure you want to clear all chat messages?')) {
+                localStorage.setItem('greatEmpireChat', JSON.stringify([]));
+                loadChatMessages();
+            }
+        }
+
+        // Reply functionality
+        function openReplyModal(index) {
+            const messages = JSON.parse(localStorage.getItem('greatEmpireChat') || '[]');
+            const message = messages[index];
+            
+            document.getElementById('replyTo').value = message.sender;
+            document.getElementById('originalMessage').value = message.text;
+            document.getElementById('replyModal').classList.add('show');
+        }
+
+        // Reply form submission
+        document.getElementById('replyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const replyTo = document.getElementById('replyTo').value;
+            const replyMessage = document.getElementById('replyMessage').value;
+            const messages = JSON.parse(localStorage.getItem('greatEmpireChat') || '[]');
+            
+            // Add admin reply to chat
+            const adminReply = {
+                sender: 'admin',
+                text: `Reply to ${replyTo}: ${replyMessage}`,
+                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+            };
+            
+            messages.push(adminReply);
+            localStorage.setItem('greatEmpireChat', JSON.stringify(messages));
+            
+            // Close modal and refresh chat
+            closeModal('replyModal');
+            loadChatMessages();
+            
+            // Reset form
+            this.reset();
+        });
+
+        // Hire Us Messages functionality
+        function loadHireRequests() {
+            const requests = JSON.parse(localStorage.getItem('greatEmpireHireRequests') || '[]');
+            const requestsList = document.getElementById('hireRequestsList');
+            requestsList.innerHTML = '';
+
+            if (requests.length === 0) {
+                requestsList.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: var(--text-light);">
+                        <h4>No hire requests yet</h4>
+                        <p>When clients submit hire requests from website, they will appear here.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            requests.forEach((request, index) => {
+                const requestCard = document.createElement('div');
+                requestCard.className = 'stat-card';
+                requestCard.style.marginBottom = '1rem';
+                requestCard.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                        <div style="flex: 1;">
+                            <h4 style="color: var(--dark-bg); margin-bottom: 0.5rem; font-size: 1.1rem;">${request.name}</h4>
+                            <p style="color: var(--primary-color); font-weight: 600; margin-bottom: 0.5rem;">${request.email}</p>
+                            <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 0.5rem;">${request.projectType}</p>
+                            ${request.budget ? `<p style="color: var(--text-light); font-size: 0.9rem;">Budget: ${request.budget}</p>` : ''}
+                            ${request.timeline ? `<p style="color: var(--text-light); font-size: 0.9rem;">Timeline: ${request.timeline}</p>` : ''}
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <span style="font-size: 0.8rem; color: var(--text-light);">${request.date}</span>
+                            <button onclick="deleteHireRequest(${index})" style="background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">Delete</button>
+                        </div>
+                    </div>
+                    <div style="background: var(--light-bg); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                        <p style="color: var(--text-main); font-size: 0.9rem; line-height: 1.5;">${request.message}</p>
+                    </div>
+                `;
+                requestsList.appendChild(requestCard);
+            });
+        }
+
+        function deleteHireRequest(index) {
+            if (confirm('Are you sure you want to delete this hire request?')) {
+                const requests = JSON.parse(localStorage.getItem('greatEmpireHireRequests') || '[]');
+                requests.splice(index, 1);
+                localStorage.setItem('greatEmpireHireRequests', JSON.stringify(requests));
+                loadHireRequests();
+            }
+        }
+
+        function clearAllHireRequests() {
+            if (confirm('Are you sure you want to clear all hire requests?')) {
+                localStorage.setItem('greatEmpireHireRequests', JSON.stringify([]));
+                loadHireRequests();
+            }
+        }
+
+        // Logout
+        function logout() {
+            sessionStorage.removeItem('adminLoggedIn');
+            sessionStorage.removeItem('adminUser');
+            window.location.href = 'admin-login.html';
+        }
+
+        // Initialize dashboard on load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardStats();
+            
+            // Track page views
+            let views = parseInt(localStorage.getItem('pageViews') || '0');
+            views++;
+            localStorage.setItem('pageViews', views);
+        });
+
+        // Email functionality
+        let currentEmailTab = 'sent';
+
+        function openEmailModal() {
+            document.getElementById('emailModal').classList.add('show');
+        }
+
+        function switchEmailTab(tab, element) {
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Add active class to clicked tab
+            element.classList.add('active');
+            
+            // Update current tab
+            currentEmailTab = tab;
+            
+            // Load appropriate email data
+            loadEmails();
+        }
+
+        // Email form submission
+        document.getElementById('emailForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const emailTo = document.getElementById('emailTo').value;
+            const emailSubject = document.getElementById('emailSubject').value;
+            const emailMessage = document.getElementById('emailMessage').value;
+            const emailFrom = document.getElementById('emailFrom').checked;
+            
+            // Store sent email
+            const sentEmails = JSON.parse(localStorage.getItem('greatEmpireSentEmails') || '[]');
+            const newEmail = {
+                to: emailTo,
+                subject: emailSubject,
+                message: emailMessage,
+                from: emailFrom ? 'greatempire187@gmail.com' : 'admin@greatempire.com',
+                date: new Date().toLocaleString(),
+                status: 'sent'
+            };
+            
+            sentEmails.push(newEmail);
+            localStorage.setItem('greatEmpireSentEmails', JSON.stringify(sentEmails));
+            
+            // Close modal and refresh email list
+            closeModal('emailModal');
+            loadEmails();
+            
+            // Reset form
+            this.reset();
+            
+            // Show success message
+            alert('Email sent successfully!');
+        });
+
+        function loadEmails() {
+            const tbody = document.getElementById('emailTable');
+            tbody.innerHTML = '';
+            
+            if (currentEmailTab === 'inbox') {
+                // Load inbox emails (for demo purposes, showing some sample emails)
+                const inboxEmails = [
+                    {
+                        from: 'user@example.com',
+                        subject: 'Project Inquiry',
+                        message: 'I would like to inquire about your web development services.',
+                        date: new Date(Date.now() - 86400000).toLocaleString(),
+                        status: 'unread'
+                    },
+                    {
+                        from: 'client@business.com',
+                        subject: 'Quote Request',
+                        message: 'Can you provide a quote for a custom website project?',
+                        date: new Date(Date.now() - 172800000).toLocaleString(),
+                        status: 'unread'
+                    }
+                ];
+                
+                if (inboxEmails.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-light);">
+                                No emails in inbox
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                inboxEmails.forEach((email, index) => {
+                    const row = tbody.insertRow();
+                    row.innerHTML = `
+                        <td>${email.from}</td>
+                        <td>${email.subject}</td>
+                        <td>${email.message.substring(0, 50)}${email.message.length > 50 ? '...' : ''}</td>
+                        <td>${email.date}</td>
+                        <td><span class="status-badge status-${email.status}">${email.status}</span></td>
+                        <td>
+                            <button class="btn btn-primary" onclick="viewEmail(${index})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-success" onclick="openInboxReplyModal(${index})">
+                                <i class="fas fa-reply"></i>
+                            </button>
+                            <button class="btn btn-danger" onclick="deleteInboxEmail(${index})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                });
+            } else {
+                // Load sent emails
+                const emails = JSON.parse(localStorage.getItem('greatEmpireSentEmails') || '[]');
+                
+                if (emails.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-light);">
+                                No emails sent yet
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                emails.forEach((email, index) => {
+                    const row = tbody.insertRow();
+                    row.innerHTML = `
+                        <td>${email.to}</td>
+                        <td>${email.subject}</td>
+                        <td>${email.message.substring(0, 50)}${email.message.length > 50 ? '...' : ''}</td>
+                        <td>${email.date}</td>
+                        <td><span class="status-badge status-${email.status}">${email.status}</span></td>
+                        <td>
+                            <button class="btn btn-primary" onclick="viewEmail(${index})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-danger" onclick="deleteEmail(${index})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                });
+            }
+        }
+
+        function viewEmail(index) {
+            const emails = JSON.parse(localStorage.getItem('greatEmpireSentEmails') || '[]');
+            const email = emails[index];
+            
+            alert(`To: ${email.to}\nSubject: ${email.subject}\nMessage: ${email.message}\nFrom: ${email.from}\nDate: ${email.date}`);
+        }
+
+        function deleteEmail(index) {
+            if (currentEmailTab === 'inbox') {
+                if (confirm('Are you sure you want to delete this inbox email?')) {
+                    const inboxEmails = [
+                        {
+                            from: 'user@example.com',
+                            subject: 'Project Inquiry',
+                            message: 'I would like to inquire about your web development services.',
+                            date: new Date(Date.now() - 86400000).toLocaleString(),
+                            status: 'unread'
+                        },
+                        {
+                            from: 'client@business.com',
+                            subject: 'Quote Request',
+                            message: 'Can you provide a quote for a custom website project?',
+                            date: new Date(Date.now() - 172800000).toLocaleString(),
+                            status: 'unread'
+                        }
+                    ];
+                    inboxEmails.splice(index, 1);
+                    loadEmails();
+                }
+            } else {
+                if (confirm('Are you sure you want to delete this email?')) {
+                    const emails = JSON.parse(localStorage.getItem('greatEmpireSentEmails') || '[]');
+                    emails.splice(index, 1);
+                    localStorage.setItem('greatEmpireSentEmails', JSON.stringify(emails));
+                    loadEmails();
+                }
+            }
+        }
+
+        function openInboxReplyModal(index) {
+            const inboxEmails = [
+                {
+                    from: 'user@example.com',
+                    subject: 'Project Inquiry',
+                    message: 'I would like to inquire about your web development services.',
+                    date: new Date(Date.now() - 86400000).toLocaleString(),
+                    status: 'unread'
+                },
+                {
+                    from: 'client@business.com',
+                    subject: 'Quote Request',
+                    message: 'Can you provide a quote for a custom website project?',
+                    date: new Date(Date.now() - 172800000).toLocaleString(),
+                    status: 'unread'
+                }
+            ];
+            const email = inboxEmails[index];
+            
+            document.getElementById('replyTo').value = email.from;
+            document.getElementById('originalInboxMessage').value = email.message;
+            document.getElementById('inboxReplyModal').classList.add('show');
+        }
+
+        // Inbox reply form submission
+        document.getElementById('inboxReplyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const replyTo = document.getElementById('replyTo').value;
+            const replyMessage = document.getElementById('inboxReplyMessage').value;
+            
+            // Store admin reply to chat
+            const messages = JSON.parse(localStorage.getItem('greatEmpireChat') || '[]');
+            const adminReply = {
+                sender: 'admin',
+                text: `Reply to ${replyTo}: ${replyMessage}`,
+                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+            };
+            
+            messages.push(adminReply);
+            localStorage.setItem('greatEmpireChat', JSON.stringify(messages));
+            
+            // Close modal and refresh chat
+            closeModal('inboxReplyModal');
+            loadChatMessages();
+            
+            // Reset form
+            this.reset();
+            
+            // Show success message
+            alert('Reply sent successfully!');
+        });
+
+        function deleteInboxEmail(index) {
+            if (confirm('Are you sure you want to delete this inbox email?')) {
+                // For demo purposes, we'll use a static array
+                // In a real application, this would fetch from a backend
+                const inboxEmails = [
+                    {
+                        from: 'user@example.com',
+                        subject: 'Project Inquiry',
+                        message: 'I would like to inquire about your web development services.',
+                        date: new Date(Date.now() - 86400000).toLocaleString(),
+                        status: 'unread'
+                    },
+                    {
+                        from: 'client@business.com',
+                        subject: 'Quote Request',
+                        message: 'Can you provide a quote for a custom website project?',
+                        date: new Date(Date.now() - 172800000).toLocaleString(),
+                        status: 'unread'
+                    }
+                ];
+                inboxEmails.splice(index, 1);
+                loadEmails();
+            }
+        }
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>

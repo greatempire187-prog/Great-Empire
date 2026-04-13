@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Great Empire Team - Hire Us</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ffb703;
+            --primary-hover: #fb8500;
+            --dark-bg: #023047;
+            --light-bg: #f8f9fa;
+            --text-main: #212529;
+            --text-light: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: var(--text-main);
+            background-color: var(--light-bg);
+            overflow-x: hidden;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(2, 48, 71, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-decoration: none;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            color: var(--primary-color);
+        }
+
+        nav a {
+            color: white;
+            margin-left: 2rem;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 400;
+            transition: color 0.3s;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: var(--primary-color);
+        }
+
+        .page-header {
+            background: linear-gradient(rgba(2, 48, 71, 0.9), rgba(2, 48, 71, 0.9)), url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
+            padding: 10rem 2rem 6rem;
+            text-align: center;
+            color: white;
+        }
+
+        .page-header h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .content-section {
+            background: white;
+            max-width: 900px;
+            margin: -3rem auto 4rem;
+            border-radius: 20px;
+            padding: 4rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            position: relative;
+            z-index: 10;
+        }
+
+        .content-section h2 {
+            color: var(--dark-bg);
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .content-section h2::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 3px;
+            background-color: var(--primary-color);
+            bottom: -8px;
+            left: 25%;
+            border-radius: 2px;
+        }
+
+        .content-section p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .service-card {
+            background: linear-gradient(135deg, rgba(2, 48, 71, 0.05) 0%, rgba(255, 183, 3, 0.1) 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 183, 3, 0.2);
+        }
+
+        .service-card h3 {
+            color: var(--dark-bg);
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .service-card p {
+            color: var(--text-light);
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+
+        .contact-form {
+            background: var(--light-bg);
+            padding: 3rem;
+            border-radius: 15px;
+            margin-top: 3rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--dark-bg);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+            color: var(--dark-bg);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(251, 133, 0, 0.3);
+        }
+
+        .cta-box {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+            color: var(--dark-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .cta-box h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .cta-box p {
+            font-size: 1.1rem;
+            margin-bottom: 0;
+        }
+
+        footer {
+            background: #011E2D;
+            color: white;
+            padding: 3rem 2rem 1.5rem;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo span {
+            color: var(--primary-color);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.5rem;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav a {
+                margin: 0 0.8rem;
+            }
+
+            .content-section {
+                padding: 2rem;
+                margin: -2rem 1rem 3rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">Great <span>Empire</span></a>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="services.html">Services</a>
+                <a href="contact.html">Contact</a>
+                <a href="code-gallery.html">Code Gallery</a>
+                <a href="hire-us.html" class="active">Hire Us</a>
+                <a href="user-dashboard.html">Chat Admin</a>
+                <a href="settings.html">Settings</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="page-header">
+        <h1>Hire Great Empire</h1>
+        <p>Partner with our expert team for your next big project. Let's build something extraordinary together.</p>
+    </div>
+
+    <main class="content-section">
+        <h2>Why Hire Great Empire?</h2>
+        <p>When you choose Great Empire, you're not just hiring developers – you're partnering with a team of passionate technologists dedicated to turning your vision into reality. Our expertise spans across modern technologies and industries, ensuring we have the right skills for your project.</p>
+
+        <div class="services-grid">
+            <div class="service-card">
+                <h3>🚀 Custom Software Development</h3>
+                <p>Build scalable, secure, and innovative applications tailored to your specific business needs using cutting-edge technologies.</p>
+            </div>
+            <div class="service-card">
+                <h3>📱 Mobile App Development</h3>
+                <p>Create engaging mobile experiences for iOS and Android platforms that delight users and drive business growth.</p>
+            </div>
+            <div class="service-card">
+                <h3>🤖 AI & Data Science</h3>
+                <p>Leverage machine learning and data analytics to gain insights and automate complex business processes.</p>
+            </div>
+            <div class="service-card">
+                <h3>🌐 Web Development</h3>
+                <p>Design and develop responsive, high-performance web applications that provide exceptional user experiences.</p>
+            </div>
+            <div class="service-card">
+                <h3>☁️ Cloud Solutions</h3>
+                <p>Deploy and manage scalable cloud infrastructure that grows with your business needs.</p>
+            </div>
+            <div class="service-card">
+                <h3>🔧 Technical Consulting</h3>
+                <p>Get expert guidance on technology architecture, best practices, and digital transformation strategies.</p>
+            </div>
+        </div>
+
+        <div class="cta-box">
+            <h3>Ready to Start Your Project?</h3>
+            <p>Let's discuss how we can help bring your ideas to life. Contact us today for a free consultation!</p>
+        </div>
+
+        <div class="contact-form">
+            <h2>Get a Free Quote</h2>
+            <form onsubmit="handleSubmit(event)">
+                <div class="form-group">
+                    <label for="name">Your Name *</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="company">Company</label>
+                    <input type="text" id="company" name="company">
+                </div>
+                <div class="form-group">
+                    <label for="project-type">Project Type *</label>
+                    <select id="project-type" name="project-type" required>
+                        <option value="">Select a service</option>
+                        <option value="web-development">Web Development</option>
+                        <option value="mobile-app">Mobile App Development</option>
+                        <option value="custom-software">Custom Software</option>
+                        <option value="ai-data-science">AI & Data Science</option>
+                        <option value="cloud-solutions">Cloud Solutions</option>
+                        <option value="consulting">Technical Consulting</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="budget">Estimated Budget</label>
+                    <select id="budget" name="budget">
+                        <option value="">Select budget range</option>
+                        <option value="5k-10k">$5,000 - $10,000</option>
+                        <option value="10k-25k">$10,000 - $25,000</option>
+                        <option value="25k-50k">$25,000 - $50,000</option>
+                        <option value="50k+">$50,000+</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="timeline">Timeline</label>
+                    <select id="timeline" name="timeline">
+                        <option value="">Select timeline</option>
+                        <option value="urgent">ASAP (Less than 1 month)</option>
+                        <option value="soon">1-3 months</option>
+                        <option value="normal">3-6 months</option>
+                        <option value="flexible">6+ months / Flexible</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message">Project Details *</label>
+                    <textarea id="message" name="message" required placeholder="Tell us about your project, requirements, and goals..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Send Project Request</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-logo">Great <span>Empire</span></div>
+        <p style="color: rgba(255,255,255,0.7); max-width: 400px; margin: 0 auto;">Empowering businesses through cutting-edge technology and innovative software solutions.</p>
+        <div class="footer-bottom">
+            &copy; 2026 Great Empire Team. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        function handleSubmit(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData);
+            
+            // Save to localStorage for admin dashboard
+            const HIRE_REQUESTS_KEY = 'greatEmpireHireRequests';
+            const existingRequests = JSON.parse(localStorage.getItem(HIRE_REQUESTS_KEY)) || [];
+            
+            const newRequest = {
+                name: data.name,
+                email: data.email,
+                company: data.company || 'Not provided',
+                projectType: data['project-type'],
+                budget: data.budget || 'Not specified',
+                timeline: data.timeline || 'Not specified',
+                message: data.message,
+                date: new Date().toLocaleString()
+            };
+            
+            existingRequests.push(newRequest);
+            localStorage.setItem(HIRE_REQUESTS_KEY, JSON.stringify(existingRequests));
+            
+            // Send email notification to admin
+            sendEmailNotification(newRequest);
+            
+            // Show success message
+            alert('Thank you for your interest! We will contact you within 24 hours to discuss your project.');
+            
+            // Reset form
+            event.target.reset();
+        }
+        
+        function sendEmailNotification(request) {
+            // In a real implementation, this would send an email to greatempire187@gmail.com
+            // For now, we'll simulate the email notification
+            console.log('EMAIL NOTIFICATION SENT TO: greatempire187@gmail.com');
+            console.log('HIRE REQUEST DETAILS:', request);
+            
+            // You could integrate with EmailJS, Formspree, or backend API here
+            // Example: EmailJS.sendEmail('service_id', 'template_id', {
+            //     to: 'greatempire187@gmail.com',
+            //     subject: `New Hire Request: ${request.name}`,
+            //     message: `Name: ${request.name}\nEmail: ${request.email}\nCompany: ${request.company}\nProject Type: ${request.projectType}\nBudget: ${request.budget}\nTimeline: ${request.timeline}\nMessage: ${request.message}`
+            // });
+        }
+    </script>
+    <!-- Code Protection Script -->
+    <script src="code-protection.js"></script>
+</body>
+
+</html>
